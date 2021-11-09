@@ -49,8 +49,8 @@ services:
       - influxdb-storage:/var/lib/influxdb
     environment:
       - INFLUXDB_DB=db0
-#      - INFLUXDB_ADMIN_USER=admin
-#      - INFLUXDB_ADMIN_PASSWORD=password123
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=password123
     networks:
       - default
   chronograf:
@@ -63,8 +63,8 @@ services:
       - influxdb
     environment:
       - INFLUXDB_URL=http://influxdb:8086
-#      - INFLUXDB_USERNAME=admin
-#      - INFLUXDB_PASSWORD=password123
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=password123
   grafana:
     image: grafana/grafana
     ports:
