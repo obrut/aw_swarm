@@ -32,6 +32,7 @@ services:
     depends_on:
       - sensor1
       - sensor2
+      - mosquitto
   mosquitto:
     image: eclipse-mosquitto
     ports:
@@ -48,38 +49,20 @@ services:
     volumes:
       - influxdb-storage:/var/lib/influxdb
     environment:
-      - INFLUXDB_DB=db0
+      - INFLUXDB_DB=telegraf
       - INFLUXDB_ADMIN_USER=admin
       - INFLUXDB_ADMIN_PASSWORD=password123
     networks:
       - default
-  chronograf:
-    image: chronograf
-    ports:
-      - '8888:8888'
+  telegraf:
+    image: telegraf
     volumes:
-      - chronograph-storage:/var/lib/chronograf
+      - $PWD/telegraf.conf:/etc/telegraf/telegraf.conf
     depends_on:
       - influxdb
-    environment:
-      - INFLUXDB_URL=http://influxdb:8086
-      - INFLUXDB_USERNAME=admin
-      - INFLUXDB_PASSWORD=password123
-  grafana:
-    image: grafana/grafana
-    ports:
-      - '3000:3000'
-    volumes:
-      - grafana-storage:/var/lib/grafana
-      - ./grafana-provisioning/:/etc/grafana/provisioning
-    depends_on:
-      - influxdb
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=password123
+    networks:
+      - default
 volumes:
   influxdb-storage:
-  chronograph-storage:
-  grafana-storage:
 networks:
   default:
