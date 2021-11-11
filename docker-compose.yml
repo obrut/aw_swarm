@@ -42,19 +42,31 @@ services:
       - ${PWD}/mosquitto:/mosquitto
     networks:
       - default
+  telegraf:
+    image: telegraf
+    volumes:
+      - $PWD/telegraf.conf:/etc/telegraf/telegraf.conf
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUX_TOKEN=kjsdfeuirsnkfshfkjdfhsfhvkjsdfkslfjl
+    networks:
+      - default
   influxdb:
-    image: influxdb:latest
+    image: influxdb:2.0
     ports:
       - '8086:8086'
     volumes:
-      - $PWD/influx/data:/var/lib/influxdb2
-      - $PWD/influx/config:/etc/influxdb2
+      - $PWD/influx:/var/lib/influxdb2
+      - $PWD/influx/config:/etc/influxdb2/config
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
       - DOCKER_INFLUXDB_INIT_PASSWORD=password123
       - DOCKER_INFLUXDB_INIT_ORG=Enfo
       - DOCKER_INFLUXDB_INIT_BUCKET=aw
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=kjsdfeuirsnkfshfkjdfhsfhvkjsdfkslfjl
+      - token=kjsdfeuirsnkfshfkjdfhsfhvkjsdfkslfjl
     networks:
       - default
 networks:
